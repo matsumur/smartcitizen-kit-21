@@ -430,7 +430,7 @@ void SckBase::reviewState()
 		} else {
 
 
-			while ( 	!charger.onUSB && 					// No USB connected
+			while ( 	//!charger.onUSB && 					// No USB connected
 					!timeToPublish && 					// No need to publish
 					pendingSensors <= 0 && 					// No sensor to wait to
 					st.timeStat.ok && 					// RTC is synced and working
@@ -511,7 +511,7 @@ void SckBase::reviewState()
 		} else {
 
 												// Conditions to go to sleep
-			while ( 	!charger.onUSB && 					// No USB connected
+			while ( 	//!charger.onUSB && 					// No USB connected
 					!timeToPublish && 					// No need to publish
 					pendingSensors <= 0 && 					// No sensor to wait to
 					st.timeStat.ok && 					// RTC is synced and working
@@ -749,6 +749,7 @@ void SckBase::saveConfig(bool defaults)
 	// Save to eeprom
 	if (defaults) {
 		Configuration defaultConfig;
+		AllSensors defaultSensors;
 
 		if (config.mac.valid) macAddress = String(config.mac.address); 	// If we already have a mac address keep it
 
@@ -762,8 +763,8 @@ void SckBase::saveConfig(bool defaults)
 		}
 
 		for (uint8_t i=0; i<SENSOR_COUNT; i++) {
-			config.sensors[i].enabled = sensors[static_cast<SensorType>(i)].defaultEnabled;
-			config.sensors[i].everyNint = 1;
+			config.sensors[i].enabled = defaultSensors[static_cast<SensorType>(i)].enabled;
+			config.sensors[i].everyNint = defaultSensors[static_cast<SensorType>(i)].everyNint;
 		}
 		pendingSyncConfig = true;
 	} else {
@@ -1266,7 +1267,7 @@ bool SckBase::sdInit()
 }
 bool SckBase::sdDetect()
 {
-	lastUserEvent = millis();
+	/* lastUserEvent = millis(); */
 	st.cardPresent = !digitalRead(pinCARD_DETECT);
 	st.cardPresentError = false;
 

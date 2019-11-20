@@ -154,7 +154,7 @@ class SckBase
 
 		// Power
 		uint16_t sleepTime = 3000; 	// ms between micro led flashes
-		const uint16_t waitAfterLastEvent = 60000; // Time to avoid sleep after user interaction in ms
+		const uint16_t waitAfterLastEvent = 60000 * 60; // Time to avoid sleep after user interaction in ms
 
 		void updatePower();
 		uint32_t updatePowerMillis = 0;

@@ -57,7 +57,7 @@ class sck:
     token = ''
     wifi_ssid = ''
     wifi_pass = ''
-    blueprint_id = 26
+    blueprint_id = 18
 
     verbose = 2     # 0 -> never print anything, 1 -> print only errors, 2 -> print everything
 
