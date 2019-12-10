@@ -165,7 +165,7 @@ class AllSensors
 
 			// Base Sensors
 			OneSensor { BOARD_BASE, 	100,	SENSOR_BATT_PERCENT,			"BATT",			"Battery", 					10,		true,		false,		1, 		 	"%"},
-			OneSensor { BOARD_BASE, 	100,	SENSOR_BATT_VOLTAGE,			"BATT_VOLT",		"Battery voltage",				97,		true,		false,		1, 			"V"},
+			OneSensor { BOARD_BASE, 	100,	SENSOR_BATT_VOLTAGE,			"BATT_VOLT",		"Battery voltage",				0,		true,		false,		1, 			"V"},
 			OneSensor { BOARD_BASE, 	100,	SENSOR_SDCARD,				"SDCARD",		"SDcard present", 				0,		false,		false,		1, 			"Present"},
 
 			// Urban Sensors
