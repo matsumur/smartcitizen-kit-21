@@ -16,6 +16,7 @@ Sck_DallasTemp 		dallasTemp;
 Sck_SHT31 		sht31 = Sck_SHT31(&auxWire);
 Sck_Range 		range;
 Sck_BME680 		bme680;
+Click click;
 
 // Eeprom flash emulation to store I2C address
 FlashStorage(eepromAuxData, EepromAuxData);
@@ -100,6 +101,7 @@ bool AuxBoards::start(SensorType wichSensor)
 		case SENSOR_BME680_HUMIDITY:		return bme680.start(); break;
 		case SENSOR_BME680_PRESSURE:		return bme680.start(); break;
 		case SENSOR_BME680_VOCS:		return bme680.start(); break;
+		case SENSOR_CLICK: return click.start(); break;
 		default: break;
 	}
 
@@ -170,6 +172,7 @@ bool AuxBoards::stop(SensorType wichSensor)
 		case SENSOR_BME680_HUMIDITY:		return bme680.stop(); break;
 		case SENSOR_BME680_PRESSURE:		return bme680.stop(); break;
 		case SENSOR_BME680_VOCS:		return bme680.stop(); break;
+		case SENSOR_CLICK: return click.stop(); break;
 		default: break;
 	}
 
@@ -241,6 +244,8 @@ void AuxBoards::getReading(OneSensor *wichSensor)
 		case SENSOR_BME680_HUMIDITY:		if (bme680.getReading()) 			{ wichSensor->reading = String(bme680.humidity); return; } break;
 		case SENSOR_BME680_PRESSURE:		if (bme680.getReading()) 			{ wichSensor->reading = String(bme680.pressure); return; } break;
 		case SENSOR_BME680_VOCS:		if (bme680.getReading()) 			{ wichSensor->reading = String(bme680.VOCgas); return; } break;
+		case SENSOR_CLICK: if (click.getReading()) 			{ 
+		wichSensor->reading = String(click.reading); return; } break;
 		default: break;
 	}
 
@@ -449,6 +454,20 @@ String AuxBoards::control(SensorType wichSensor, String command)
 
 				if (pmSensor.start()) return ("Starting PM sensors...");
 				else return ("Failed starting PM sensor!!");
+
+			}
+			break;
+		} case SENSOR_CLICK: {
+
+			if (command.startsWith("stop")) {
+
+				if (click.stop()) return ("Stoping Click Sensor...");
+				else return ("Failed stoping Click Sensor!!");
+
+			} else if (command.startsWith("start")) {
+
+				if (click.start()) return ("Starting Click Sensor...");
+				else return ("Failed starting Click Sensor!!");
 
 			}
 			break;
@@ -1286,6 +1305,53 @@ bool Sck_BME680::getReading()
 	VOCgas = bme.gas_resistance;
 
 	return true;
+}
+
+bool Click::start()
+{
+	if (started) return true;
+
+	if (!I2Cdetect(&auxWire, deviceAddress)) return false;
+
+	auxWire.beginTransmission(deviceAddress);
+	auxWire.write(CLICK_START);
+	auxWire.endTransmission();
+	auxWire.requestFrom(deviceAddress, 1);
+
+	bool result = auxWire.read();
+
+	if (result == 0) failed = true;
+	else started = true;
+
+	return result;
+}
+
+bool Click::stop()
+{
+	if (!I2Cdetect(&auxWire, deviceAddress)) return false;
+
+	auxWire.beginTransmission(deviceAddress);
+	auxWire.write(CLICK_STOP);
+	auxWire.endTransmission();
+
+	started = false;
+	return true;
+}
+
+float Click::getReading()
+{
+	if (!I2Cdetect(&auxWire, deviceAddress)) return false;
+
+	auxWire.beginTransmission(deviceAddress);
+	auxWire.write(CLICK_GET);
+	auxWire.endTransmission();
+
+	// Get the reading
+	auxWire.requestFrom(deviceAddress, 4);
+	uint32_t start = millis();
+	while (!auxWire.available()) if ((millis() - start)>500) return -9999;
+	for (uint8_t i=0; i<4; i++) uRead.b[i] = auxWire.read();
+	return uRead.fval;
 }
 
 void writeI2C(byte deviceaddress, byte instruction, byte data )

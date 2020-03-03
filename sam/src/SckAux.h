@@ -130,7 +130,9 @@ class AuxBoards
 			0x77,			// SENSOR_BME680_PRESSURE,
 			0x77,			// SENSOR_BME680_VOCS,
 
-			0x3c		// SENSOR_GROOVE_OLED,
+			0x3c,		// SENSOR_GROOVE_OLED,
+
+			0x03		// SENSOR_CLICK,
 		};
 
 		bool start(SensorType wichSensor);
@@ -553,6 +555,23 @@ class Sck_BME680
 		uint32_t minTime = 1000; 	// Avoid taking readings more often than this value (ms)
 		bool alreadyStarted = false;
 		Adafruit_BME680 bme;
+};
+
+class Click
+{
+	public:
+		byte deviceAddress = 0x03;
+
+		bool start();
+		bool stop();
+		float getReading();
+	private:
+		bool started = false;
+		enum Clickcommands{
+			CLICK_START,
+			CLICK_STOP,
+			CLICK_GET
+		};
 };
 
 void writeI2C(byte deviceAddress, byte instruction, byte data);
