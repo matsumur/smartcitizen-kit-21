@@ -11,3 +11,4 @@ inventory.csv.BAK
 .DS_Store
 .env
 secret.py
+sam/.vscode

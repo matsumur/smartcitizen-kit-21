@@ -1347,11 +1347,16 @@ float Click::getReading()
 	auxWire.endTransmission();
 
 	// Get the reading
-	auxWire.requestFrom(deviceAddress, 4);
+	auxWire.requestFrom(deviceAddress, valuesSize);
 	uint32_t start = millis();
 	while (!auxWire.available()) if ((millis() - start)>500) return -9999;
-	for (uint8_t i=0; i<4; i++) uRead.b[i] = auxWire.read();
-	return uRead.fval;
+
+	for (uint8_t i=0; i<valuesSize; i++) {
+		values[i] = auxWire.read();
+	}
+	count = (values[0]<<8) + values[1];
+
+	return count;
 }
 
 void writeI2C(byte deviceaddress, byte instruction, byte data )

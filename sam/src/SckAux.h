@@ -561,12 +561,15 @@ class Click
 {
 	public:
 		byte deviceAddress = 0x03;
-
+		uint16_t count;
 		bool start();
 		bool stop();
 		float getReading();
 	private:
 		bool started = false;
+		
+		static const uint8_t valuesSize = 18;
+		uint8_t values[valuesSize];
 		enum Clickcommands{
 			CLICK_START,
 			CLICK_STOP,
