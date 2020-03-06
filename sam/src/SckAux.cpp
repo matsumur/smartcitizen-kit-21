@@ -1326,8 +1326,6 @@ bool Click::stop()
 
 bool Click::getReading()
 {
-	if (!I2Cdetect(&auxWire, deviceAddress)) return false;
-
 	auxWire.beginTransmission(deviceAddress);
 	auxWire.write(CLICK_GET);
 	auxWire.endTransmission();
