@@ -244,7 +244,7 @@ void AuxBoards::getReading(OneSensor *wichSensor)
 		case SENSOR_BME680_HUMIDITY:		if (bme680.getReading()) 			{ wichSensor->reading = String(bme680.humidity); return; } break;
 		case SENSOR_BME680_PRESSURE:		if (bme680.getReading()) 			{ wichSensor->reading = String(bme680.pressure); return; } break;
 		case SENSOR_BME680_VOCS:		if (bme680.getReading()) 			{ wichSensor->reading = String(bme680.VOCgas); return; } break;
-		case SENSOR_CLICK: if (click.getReading() >= 0) 			{ 
+		case SENSOR_CLICK: if (click.getReading()) 			{ 
 		wichSensor->reading = String(click.count); return; } break;
 		default: break;
 	}
@@ -454,20 +454,6 @@ String AuxBoards::control(SensorType wichSensor, String command)
 
 				if (pmSensor.start()) return ("Starting PM sensors...");
 				else return ("Failed starting PM sensor!!");
-
-			}
-			break;
-		} case SENSOR_CLICK: {
-
-			if (command.startsWith("stop")) {
-
-				if (click.stop()) return ("Stoping Click Sensor...");
-				else return ("Failed stoping Click Sensor!!");
-
-			} else if (command.startsWith("start")) {
-
-				if (click.start()) return ("Starting Click Sensor...");
-				else return ("Failed starting Click Sensor!!");
 
 			}
 			break;
@@ -1338,9 +1324,9 @@ bool Click::stop()
 	return true;
 }
 
-float Click::getReading()
+bool Click::getReading()
 {
-	if (!I2Cdetect(&auxWire, deviceAddress)) return -1;
+	if (!I2Cdetect(&auxWire, deviceAddress)) return false;
 
 	auxWire.beginTransmission(deviceAddress);
 	auxWire.write(CLICK_GET);
@@ -1349,14 +1335,14 @@ float Click::getReading()
 	// Get the reading
 	auxWire.requestFrom(deviceAddress, valuesSize);
 	uint32_t start = millis();
-	while (!auxWire.available()) if ((millis() - start)>500) return -9999;
+	while (!auxWire.available()) if ((millis() - start)>500) return false;
 
 	for (uint8_t i=0; i<valuesSize; i++) {
 		values[i] = auxWire.read();
 	}
 	count = (values[0]<<8) + values[1];
 
-	return count;
+	return true;
 }
 
 void writeI2C(byte deviceaddress, byte instruction, byte data )

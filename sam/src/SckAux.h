@@ -564,7 +564,7 @@ class Click
 		uint16_t count;
 		bool start();
 		bool stop();
-		float getReading();
+		bool getReading();
 	private:
 		bool started = false;
 		bool failed = false;
