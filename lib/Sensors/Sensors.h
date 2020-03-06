@@ -118,7 +118,7 @@ enum SensorType
 	SENSOR_CLICK,
 	// Add New Sensor Here!!!
 
-	//SENSOR_COUNT should always placed on the last line.
+	//SENSOR_COUNT should always be placed on the last line.
 	SENSOR_COUNT
 };
 
