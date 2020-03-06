@@ -245,7 +245,7 @@ void AuxBoards::getReading(OneSensor *wichSensor)
 		case SENSOR_BME680_PRESSURE:		if (bme680.getReading()) 			{ wichSensor->reading = String(bme680.pressure); return; } break;
 		case SENSOR_BME680_VOCS:		if (bme680.getReading()) 			{ wichSensor->reading = String(bme680.VOCgas); return; } break;
 		case SENSOR_CLICK: if (click.getReading()) 			{ 
-		wichSensor->reading = String(click.reading); return; } break;
+		wichSensor->reading = String(click.count); return; } break;
 		default: break;
 	}
 

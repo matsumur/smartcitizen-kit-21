@@ -567,6 +567,7 @@ class Click
 		float getReading();
 	private:
 		bool started = false;
+		bool failed = false;
 		
 		static const uint8_t valuesSize = 18;
 		uint8_t values[valuesSize];
