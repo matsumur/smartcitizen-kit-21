@@ -278,7 +278,7 @@ class AllSensors
 			// Groove I2C Oled Display 96x96
 			OneSensor { BOARD_AUX,		250,	SENSOR_GROOVE_OLED,			"GR_OLED",		"Groove OLED",					0,		false,		false,		1,			},
 			
-			OneSensor { BOARD_AUX,		100,	SENSOR_CLICK,			"CLICK",		"Click Count",					0,		false,		false,		1,			"Clicks"},
+			OneSensor { BOARD_AUX,		100,	SENSOR_CLICK,				"CLICK",		"Click Count",					0,		false,		false,		1,			"Clicks"},
 
 			// Add New Sensor Here!!!
 
